@@ -5,6 +5,7 @@ This repository provides tutorial on how to render icons using normal maps in Dr
 The tutorial covers several critical concepts such as setting up icons, defining and manipulating icon colors, setting the direction of the light, illuminating the scene, and the final rendering process. Each section is elaborated with appropriate code snippets, complemented by visual aids to ensure a clear understanding of the concepts. 
 
 - [Normal Map Rendering Tutorial](#normal-map-rendering-tutorial)
+- [Tutorial: \[Access Code Here\]](#tutorial-access-code-here)
 - [Prerequisites](#prerequisites)
   - [Icon: `icon()`](#icon-icon)
   - [Icon Operations: `*`, `/`, `+`](#icon-operations---)
@@ -22,6 +23,9 @@ The tutorial covers several critical concepts such as setting up icons, defining
   - [Render](#render)
     - [Base](#base)
     - [Reduced](#reduced)
+
+# Tutorial: [[Access Code Here]](scripts/normal/normal.dm)
+Explore our tutorial code linked above to gain hands-on knowledge about this entire rendering process. Please note that the provided example focuses on core concepts and operations, making it extremely accessible for beginners. However, it does not delve into advanced rendering elements such as specular lighting, metallic attributes, or reflection effects. These additional aspects of rendering can be explored down the line as fundamental principles outlined in this tutorial have been fleshed out.
 
 # Prerequisites
 In order to effectively execute graphic rendering processes in BYOND Dream Maker, you'll need to understand and be able to implement the following functions and operations:
