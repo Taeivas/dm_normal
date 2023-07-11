@@ -26,6 +26,9 @@ client
                     // Define the illumination icon for the render.
                     illumination
 
+                    // Define light color.
+                    light_color
+
                     // Define the render icon for the render.
                     render
             
@@ -65,9 +68,9 @@ client
 
             // Determine the direction you want to shine light from..
             var
-                x = 1 // Assign the direction on the X axis.
+                x = -0.5 // Assign the direction on the X axis.
                 y = 1 // Assign the direction on the Y axis.
-                z = 1 // Assign the direction on the Z axis.
+                z = 0.25 // Assign the direction on the Z axis.
                 magnitude = sqrt(x ** 2 + y ** 2 + z ** 2) // Determine the magnitude.
             // Normalize the axis.
             x /= magnitude
@@ -123,8 +126,8 @@ client
 				0.66, 0.66, 0.66,
 				0.66, 0.66, 0.66
             )
-            ico.Insert(light_pos, "light_pos * normal_pos")
-            ico.Insert(light_neg, "light_neg * normal_neg")
+            ico.Insert(light_pos, "light_pos + normal_pos")
+            ico.Insert(light_neg, "light_neg + normal_neg")
 
             // Add the positive and negative lights together to illumination.
             illumination = light_pos + light_neg
@@ -132,7 +135,9 @@ client
 
             // Do the full render by multiplying the diffuse icon with illumination
             // and multiplying that by the light color.
-            var/light_color = rgb(255, 255, 255)
+            light_color = icon('art/stairs.dmi', "")
+            light_color.DrawBox(rgb(254, 125, 19), 1, 1, light_color.Width(), light_color.Height())
+            ico.Insert(light_color, "light_color")
             render = diffuse * illumination * light_color
             ico.Insert(render, "render")
 
