@@ -142,9 +142,11 @@ client
             ico.Insert(render, "render")
 
             // Add a reduced color palette version of the render for bonus.
-            var/colors = 6
-            render /= 255 / (colors - 1)
-            render *= 255 / (colors - 1)
+            var
+                colors = 6
+                color_step = 255 / (colors - 1)
+            render /= color_step
+            render *= color_step
             ico.Insert(render, "render_reduced")
 
             // Write the sample images.

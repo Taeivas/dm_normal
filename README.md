@@ -74,34 +74,72 @@ A normal, in the context of computer graphics, is a vector that is encoded into 
 
 ### Positive
 The positive space refers to the set of surface normals that are oriented towards the positive direction of the axes. In the color representation, this typically translates to colors from middle gray to white (from the RGB value `(128,128,128)` to `(255,255,255)`). It symbolizes the part of the object that faces towards the positive direction of light, and thus, receives more light.
-
+```dm
+normal_pos = value * 2 - 1
+```
 <img src="./samples/normal_pos.png" title="Positive Normal" width="96" height="96">
 
 ### Negative
 Conversely, the negative space of normals refers to those normals that are oriented towards the negative direction of the axes. In color representation, this translates to colors from middle gray to black (from the RGB value `(128,128,128)` to `(0,0,0)`). This symbolizes the part of the object that faces away from the light source, thereby receiving less light, or none at all.
-
+```dm
+normal_neg = value * (-2) + 1
+```
 <img src="./samples/normal_neg.png" title="Negative Normal" width="96" height="96">
 
 ## Lighting
 Light, within the realm of computer graphics, pertains to the direction of a light source in a three-dimensional space. This light direction, integral to the rendering process, is encoded into the RGB color space, transforming a spatial concept into a format suitable for image-based operations. Each color channel - red, green, and blue - corresponds to one dimension of the directional vector, effectively encapsulating the light source's orientation in a 3D environment.
 
 This encoded light direction becomes the basis for calculating light interactions with the surfaces of objects, particularly when determining the light intensity that impacts a single pixel. It allows us to take into account factors such as the angle and orientation of the light relative to the surface. By utilizing this light information, we can accurately compute lighting effects, including highlights, shadows, and shading, resulting in a more realistic and visually appealing render.
-
+```dm
+// Determine the direction you want to shine light from..
+x = -0.5 // Assign the direction on the X axis.
+y = 1 // Assign the direction on the Y axis.
+z = 0.25 // Assign the direction on the Z axis.
+magnitude = sqrt(x ** 2 + y ** 2 + z ** 2) // Determine the magnitude.
+// Normalize the axis.
+x /= magnitude
+y /= magnitude
+z /= magnitude
+// Create the light direction color.
+r = 128 + x * 128
+g = 128 + y * 128
+b = 128 + z * 128
+```
 <img src="./samples/light.png" title="Light" width="96" height="96">
 
 ### Positive
 The positive space corresponds to the portion of the light direction vector pointing towards the positive direction of the axes. It is represented in color space by colors ranging from middle gray to white (RGB values from `(128,128,128)` to `(255,255,255)`). This space essentially symbolizes the sections of an object that are directly facing the light source and are therefore more illuminated.
-
+```dm
+light_pos = value * 2 - 1
+light_pos + normal_pos = illumination_pos
+illumination_pos.MapColors(
+    0.66, 0.66, 0.66,
+    0.66, 0.66, 0.66,
+    0.66, 0.66, 0.66
+)
+```
 <img src="./samples/light_pos.png" title="Positive Light" width="96" height="96"><span style="font-size:4em;"> × </span><img src="./samples/normal_pos.png" title="Positive Normal" width="96" height="96"><span style="font-size:4em;"> = </span><img src="./samples/light_pos + normal_pos.png" title="Positive Illumination" width="96" height="96">
+
 
 ### Negative
 Conversely, the negative space signifies the portion of the light direction vector pointing towards the negative direction of the axes. This is visualized in color space as colors from middle gray to black (RGB values from `(128,128,128)` to `(0,0,0)`). This space represents the sections of an object that are angled away from the light source, hence, receiving less light or being in shadow.
-
+```dm
+light_neg = value * (-2) + 1
+light_neg + normal_neg = illumination_neg
+illumination_neg.MapColors(
+    0.66, 0.66, 0.66,
+    0.66, 0.66, 0.66,
+    0.66, 0.66, 0.66
+)
+```
 <img src="./samples/light_neg.png" title="Negative Light" width="96" height="96"><span style="font-size:4em;"> × </span><img src="./samples/normal_neg.png" title="Negative Normal" width="96" height="96"><span style="font-size:4em;"> = </span><img src="./samples/light_neg + normal_neg.png" title="Negative Illumination" width="96" height="96">
+
 
 ## Illumination
 Illumination is a crucial concept in the realm of computer graphics, aiming to emulate the interplay of light with the surfaces depicted by the normal maps. It incorporates both the direction and intensity of light, along with the surface properties encoded in the normals, to generate a realistic depiction of how light falls upon and interacts with an object. This computational illumination is instrumental in generating visually compelling renderings, as it generates the dynamic interplay of light and shadows, producing the illusion of depth and texture on a flat image. By accurately representing highlights, shadows, and gradations of light, illumination helps bring two-dimensional images to life, offering a more immersive, three-dimensional visual experience.
-
+```dm
+illumination_pos + illumination_neg = illumination
+```
 <img src="./samples/light_pos + normal_pos.png" title="Positive Illumination" width="96" height="96"><span style="font-size:4em;"> + </span><img src="./samples/light_neg + normal_neg.png" title="Negative Illumination" width="96" height="96"><span style="font-size:4em;"> = </span><img src="./samples/illumination.png" title="Illumination" width="96" height="96">
 
 ## Render
@@ -109,10 +147,17 @@ Rendering is the computational process of generating a visual image from raw dat
 
 ### Base
 The base render is the final outcome of combining the diffuse state of the image, which is its inherent color in absence of light, and the calculated illumination, simulating how light interacts with the object's surface. The result is a realistic visual portrayal of the object with accurately rendered highlights, shadows, and light gradations. This render is crucial in transforming the raw image data into a visually rich, detailed image that effectively mimics the behavior of light on the object's surface.
-
+```dm
+diffuse * illumination * light_color = render
+```
 <img src="./samples/diffuse.png" title="Diffuse" width="96" height="96"><span style="font-size:4em;"> × </span><img src="./samples/illumination.png" title="Illumination" width="96" height="96"><span style="font-size:4em;"> × </span><img src="./samples/light_color.png" title="Light Color" width="96" height="96"><span style="font-size:4em;"> = </span><img src="./samples/render.png" title="Render" width="96" height="96">
+
 
 ### Reduced
 The reduced render is an optimized version of the base render, where the number of colors used in the image has been deliberately minimized. While it still maintains the primary visual information, this simplification can be useful for creating certain stylistic effects, or to reduce memory usage and computational requirements. Despite the reduction in color detail, the essential characteristics of the image such as shape, shading, and lighting are preserved, allowing for effective representation with lower computational overhead.
-
+```dm
+color_step = 255 / (colors - 1)
+render_reduce = render / color_step
+render_reduce *= color_step
+```
 <img src="./samples/render.png" title="Render" width="96" height="96"><span style="font-size:4em;"> → </span><img src="./samples/render_reduced.png" title="Render - Reduced Colors" width="96" height="96">
