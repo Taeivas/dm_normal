@@ -12,9 +12,9 @@ client
                     // Define the normal icon for the render.
                     normal = icon('art/stairs.dmi', "normal")
 
-                    // Clone the normal icon for positive and negative color vectors.
-                    normal_pos = icon(normal)
-                    normal_neg = icon(normal)
+                    // Define the normal icons for positive and negative color vectors.
+                    normal_pos
+                    normal_neg
 
                     // Create the light direction icon for the render.
                     light = icon('art/stairs.dmi', "")
@@ -31,19 +31,27 @@ client
             
             // Insert the diffuse icon into the render.
             ico.Insert(diffuse, "diffuse")
+
+            // Clone the normals to positive and negative.
+            normal_pos = icon(normal)
+            normal_neg = icon(normal)
             
-            // Modify the colors of the positive normal to double the values,
-            // shift them to the left cutting off half the lower values
-            // to only retain the values past 127.
+            /*
+            Adjust the colors in the positive normal by doubling their values.
+            Then, shift the scale to the left, effectively truncating the lower half.
+            This operation ensures that only values above 127 are retained.
+            */
             normal_pos.MapColors(
                 2, 0, 0,
                 0, 2, 0,
                 0, 0, 2,
                 -1, -1, -1
             )
-            // Modify the colors of the negative normal to invert and double the values,
-            // shift them to the right to retain the lower values
-            // to only retain values below 128.
+            /*
+            Alter the colors in the negative normal by inverting and doubling their values.
+            Then, shift the scale to the right to emphasize lower values,
+            ensuring that only values less than 128 are preserved.
+            */
             normal_neg.MapColors(
                 -2, 0, 0,
                 0, -2, 0,
@@ -65,7 +73,7 @@ client
             x /= magnitude
             y /= magnitude
             z /= magnitude
-            // Create the light direction icon.
+            // Create the light direction color.
             var
                 r = 128 + x * 128
                 g = 128 + y * 128
@@ -76,18 +84,22 @@ client
             light_pos = icon(light)
             light_neg = icon(light)
 
-            // Modify the colors of the positive light to double the values,
-            // shift them to the left cutting off half the lower values
-            // to only retain the values past 127.
+            /*
+            Adjust the colors in the positive normal by doubling their values.
+            Then, shift the scale to the left, effectively truncating the lower half.
+            This operation ensures that only values above 127 are retained.
+            */
             light_pos.MapColors(
                 2, 0, 0,
                 0, 2, 0,
                 0, 0, 2,
                 -1, -1, -1
             )
-            // Modify the colors of the negative light to invert and double the values,
-            // shift them to the right to retain the lower values
-            // to only retain values below 128.
+            /*
+            Alter the colors in the negative normal by inverting and doubling their values.
+            Then, shift the scale to the right to emphasize lower values,
+            ensuring that only values less than 128 are preserved.
+            */
             light_neg.MapColors(
                 -2, 0, 0,
                 0, -2, 0,
@@ -98,7 +110,7 @@ client
             ico.Insert(light_pos, "light_pos")
             ico.Insert(light_neg, "light_neg")
 
-            // Determine the amount of light cast into the normals and cast it into grayscake
+            // Determine the amount of light cast into the normals and coinvert it into grayscake
             light_pos *= normal_pos
             light_neg *= normal_neg
             light_pos.MapColors(
@@ -120,7 +132,7 @@ client
 
             // Do the full render by multiplying the diffuse icon with illumination
             // and multiplying that by the light color.
-            var/light_color = rgb(234, 218, 93)
+            var/light_color = rgb(255, 255, 255)
             render = diffuse * illumination * light_color
             ico.Insert(render, "render")
 
