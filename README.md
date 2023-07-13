@@ -115,7 +115,7 @@ b = 128 + z * 128
 The positive space corresponds to the portion of the light direction vector pointing towards the positive direction of the axes. It is represented in color space by colors ranging from middle gray to white (RGB values from `(128,128,128)` to `(255,255,255)`). This space essentially symbolizes the sections of an object that are directly facing the light source and are therefore more illuminated.
 ```dm
 light_pos = value * 2 - 1
-light_pos + normal_pos = illumination_pos
+light_pos * normal_pos = illumination_pos
 illumination_pos.MapColors(
     0.66, 0.66, 0.66,
     0.66, 0.66, 0.66,
@@ -129,7 +129,7 @@ illumination_pos.MapColors(
 Conversely, the negative space signifies the portion of the light direction vector pointing towards the negative direction of the axes. This is visualized in color space as colors from middle gray to black (RGB values from `(128,128,128)` to `(0,0,0)`). This space represents the sections of an object that are angled away from the light source, hence, receiving less light or being in shadow.
 ```dm
 light_neg = value * (-2) + 1
-light_neg + normal_neg = illumination_neg
+light_neg * normal_neg = illumination_neg
 illumination_neg.MapColors(
     0.66, 0.66, 0.66,
     0.66, 0.66, 0.66,
