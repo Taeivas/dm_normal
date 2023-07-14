@@ -113,7 +113,7 @@ client
             ico.Insert(light_pos, "light_pos")
             ico.Insert(light_neg, "light_neg")
 
-            // Determine the amount of light cast into the normals and coinvert it into grayscake
+            // Determine the amount of light cast into the normals and convert it into grayscale.
             light_pos *= normal_pos
             light_neg *= normal_neg
             light_pos.MapColors(

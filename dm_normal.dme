@@ -8,7 +8,7 @@
 // BEGIN_FILE_DIR
 #define FILE_DIR .
 #define FILE_DIR "art"
-#define FILE_DIR "examples"
+#define FILE_DIR "samples"
 // END_FILE_DIR
 
 // BEGIN_PREFERENCES
